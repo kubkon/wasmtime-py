@@ -24,7 +24,10 @@ if machine == 'AMD64':
 if machine != 'x86_64' and machine != 'aarch64':
     raise RuntimeError("unsupported architecture for wasmtime: {}".format(machine))
 
-filename = os.path.join(os.path.dirname(__file__), sys.platform + '-' + machine, libname)
+if "WASMTIMEPATH" in os.environ:
+    filename = os.environ["WASMTIMEPATH"]
+else:
+    filename = os.path.join(os.path.dirname(__file__), sys.platform + '-' + machine, libname)
 if not os.path.exists(filename):
     raise RuntimeError("precompiled wasmtime binary not found at `{}`".format(filename))
 dll = cdll.LoadLibrary(filename)
